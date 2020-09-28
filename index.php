@@ -30,7 +30,7 @@
         ga('create', 'UA-71617690-1', 'auto');
         ga('send', 'pageview');
       </script>
-      <title>SnipeIntruders</title>
+      <title>SnipeIntruders™</title>
     </head>
     <body></body>
   </html>
