@@ -1,0 +1,27 @@
+{
+  "name": "snipeintruders",
+  "version": "1.5.0",
+  "description": "Humble HTML5 shooting game.",
+  "main": "index.html",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edgaralexanderfr/snipeintruders.git"
+  },
+  "author": "Edgar Alexander Franco <edgaralexanderfr@gmail.com> (http://edgaralexanderfr.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edgaralexanderfr/snipeintruders/issues"
+  },
+  "homepage": "https://github.com/edgaralexanderfr/snipeintruders#readme",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "serve-static": "^1.14.1"
+  }
+}

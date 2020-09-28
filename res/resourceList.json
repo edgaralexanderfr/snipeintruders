@@ -1,0 +1,73 @@
+{
+    "resourceList": "res/resourceList.json",
+    "properties": "res/properties.json",
+    "includeScript": "res/includeScript.js",
+    "cursors": {
+        "cursor": "res/cursors/cursor.png",
+        "transparent-cursor": "res/cursors/transparent-cursor.cur"
+    },
+    "js": {
+        "lib": {
+            "jquery": {
+                "2.1.3": {
+                    "jquery.min": "res/js/lib/jquery/2.1.3/jquery.min.js"
+                }
+            }
+        }
+    },
+    "images": {
+        "target": {
+            "splash": "res/images/target/splash.png",
+            "enemy": {
+                "e5": "res/images/target/enemy/e5.png",
+                "e9": "res/images/target/enemy/e9.png",
+                "e7": "res/images/target/enemy/e7.png",
+                "e6": "res/images/target/enemy/e6.png",
+                "e11": "res/images/target/enemy/e11.png",
+                "e3": "res/images/target/enemy/e3.png",
+                "e4": "res/images/target/enemy/e4.png",
+                "e8": "res/images/target/enemy/e8.png",
+                "e1": "res/images/target/enemy/e1.png",
+                "e12": "res/images/target/enemy/e12.png",
+                "e10": "res/images/target/enemy/e10.png",
+                "e2": "res/images/target/enemy/e2.png"
+            },
+            "parachute": "res/images/target/parachute.png"
+        },
+        "icon": "res/images/icon.ico",
+        "icon-chrome": "res/images/icon-chrome.png",
+        "scenery": {
+            "explosion": "res/images/scenery/explosion.png",
+            "cloud": {
+                "c2": "res/images/scenery/cloud/c2.png",
+                "c1": "res/images/scenery/cloud/c1.png",
+                "c3": "res/images/scenery/cloud/c3.png"
+            },
+            "mountains": "res/images/scenery/mountains.png",
+            "trees": "res/images/scenery/trees.png"
+        },
+        "icon-480x480": "res/images/icon-480x480.png",
+        "hud": {
+            "shot": "res/images/hud/shot.png",
+            "lifebar": "res/images/hud/lifebar.png",
+            "crosshair": "res/images/hud/crosshair.png"
+        },
+        "ui": {
+            "StartScreen": {
+                "logo-ogl": "res/images/ui/StartScreen/logo-ogl.png",
+                "logo-tpl": "res/images/ui/StartScreen/logo-tpl.psd",
+                "esrb": "res/images/ui/StartScreen/esrb.jpg",
+                "logo": "res/images/ui/StartScreen/logo.png"
+            }
+        }
+    },
+    "fonts": {
+        "pixellife": {
+            "font": "res/fonts/pixellife/font.eot"
+        }
+    },
+    "game": {
+        "properties": "res/game/properties.json"
+    },
+    "ResourceLoader": "res/ResourceLoader.js"
+}

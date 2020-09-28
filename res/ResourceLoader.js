@@ -4,7 +4,7 @@
 SI.res.ResourceLoader = new function () {
   var self                         = this;
   
-  self.RESOURCE_LIST_URL           = 'res/resourceList.php';
+  self.RESOURCE_LIST_URL           = 'res/resourceList.json';
   self.AUDIO_EXTENSION_TO_USE      = '';
   
   var loading                      = false;
