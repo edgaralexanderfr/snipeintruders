@@ -12,7 +12,7 @@
   "SceneFullScreenOnFirstEvent"             : false, 
   "SceneIconUrl"                            : "res/images/icon.ico", 
   "SceneCursorUrl"                          : "res/cursors/transparent-cursor.cur", 
-  "SceneTitle"                              : "SnipeIntruders™ 1.5", 
+  "SceneTitle"                              : "SnipeIntruders™ 1.5.1", 
   "SceneBackgroundColor"                    : "#000000", 
   "SceneCanvasBackgroundColor"              : "#ffffff", 
   "SceneCanvasXMarginProportion"            : 1, 
