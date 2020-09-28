@@ -170,19 +170,8 @@ SI.Scene = new function () {
      * @param {Number} spriteSize Sprite's global common size.
      */
     $this.adjustSizeToScreen = function (spriteSize) {
-      var $width = 0;
-      var $height = 0;
-      
-      while ($width < screen.width) {
-        $width += spriteSize;
-      }
-      
-      while ($height < screen.height) {
-        $height += spriteSize;
-      }
-      
-      width = $width - spriteSize * SI.res.ResourceLoader.getResources().game.properties.SceneCanvasXMarginProportion;
-      height = $height - spriteSize * SI.res.ResourceLoader.getResources().game.properties.SceneCanvasYMarginProportion;
+      width = spriteSize * (Math.floor(screen.width / spriteSize) - SI.res.ResourceLoader.getResources().game.properties.SceneCanvasXMarginProportion);
+      height = spriteSize * (Math.floor(screen.height / spriteSize) - SI.res.ResourceLoader.getResources().game.properties.SceneCanvasYMarginProportion);
     }
     
     /**

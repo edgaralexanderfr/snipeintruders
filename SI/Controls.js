@@ -1,29 +1,29 @@
 SI.Controls = new function () {
-  var self                       = this;
+  var self                    = this;
   
-  var on                         = false;
-  var firstEventPerformed        = false;
-  var mouseX                     = 0;
-  var mouseY                     = 0;
-  var keyDownActions             = {};
-  var keyUpActions               = {};
-  var keyDownListener            = null;
-  var keyUpListener              = null;
-  var contextMenuListener        = null;
-  var mouseMoveListeners         = [];
-  var clickListeners             = [];
-  var registeredInputListener    = null;
+  var on                      = false;
+  var firstEventPerformed     = false;
+  var mouseX                  = 0;
+  var mouseY                  = 0;
+  var keyDownActions          = {};
+  var keyUpActions            = {};
+  var keyDownListener         = null;
+  var keyUpListener           = null;
+  var contextMenuListener     = null;
+  var mouseMoveListeners      = [];
+  var clickListeners          = [];
+  var registeredInputListener = null;
   
   /**
    * Creates the necessary events listeners for track the keys and other useful controllers.
    */
   function init () {
-    window.addEventListener('keydown', onKeyDown, false);
-    window.addEventListener('keyup', onKeyUp, false);
-    window.addEventListener('contextmenu', onContextMenu, false);
-    window.addEventListener('selectstart', onSelectStart, false);
-    window.addEventListener('mousemove', onMouseMove, false);
-    window.addEventListener('click', onClick, false);
+    window.addEventListener('keydown', self.onKeyDown, false);
+    window.addEventListener('keyup', self.onKeyUp, false);
+    window.addEventListener('contextmenu', self.onContextMenu, false);
+    window.addEventListener('selectstart', self.onSelectStart, false);
+    window.addEventListener('mousemove', self.onMouseMove, false);
+    window.addEventListener('click', self.onClick, false);
   }
   
   /**
@@ -60,6 +60,24 @@ SI.Controls = new function () {
    */
   self.getMouseY = function () {
     return mouseY;
+  }
+  
+  /**
+   * Set the mouse X coordinate.
+   *
+   * @param {number} $mouseX Mouse X coordinate.
+   */
+  self.setMouseX = function ($mouseX) {
+    mouseX = $mouseX;
+  }
+  
+  /**
+   * Set the mouse Y coordinate.
+   *
+   * @param {number} $mouseY Mouse Y coordinate.
+   */
+  self.setMouseY = function ($mouseY) {
+    mouseY = $mouseY;
   }
   
   /**
@@ -179,12 +197,16 @@ SI.Controls = new function () {
    *
    * @param {Object} evt Sent event object.
    */
-  function onKeyDown (evt) {
+  self.onKeyDown = function (evt) {
     if (!on) {
       return;
     }
     
     if (typeof keyDownActions[ 'k' + evt.which ] == 'function') {
+      if (typeof evt['preventDefault'] == 'function') {
+        evt.preventDefault();
+      }
+      
       if (typeof registeredInputListener == 'function') {
         registeredInputListener();
       }
@@ -204,12 +226,16 @@ SI.Controls = new function () {
    *
    * @param {Object} evt Sent event object.
    */
-  function onKeyUp (evt) {
+  self.onKeyUp = function (evt) {
     if (!on) {
       return;
     }
     
     if (typeof keyUpActions[ 'k' + evt.which ] == 'function') {
+      if (typeof evt['preventDefault'] == 'function') {
+        evt.preventDefault();
+      }
+      
       keyUpActions[ 'k' + evt.which ]();
     }
     
@@ -223,8 +249,10 @@ SI.Controls = new function () {
    *
    * @param {Object} evt Sent event object.
    */
-  function onContextMenu (evt) {
-    evt.preventDefault();
+  self.onContextMenu = function (evt) {
+    if (typeof evt['preventDefault'] == 'function') {
+      evt.preventDefault();
+    }
     
     if (!on) {
       return;
@@ -240,8 +268,10 @@ SI.Controls = new function () {
    *
    * @param {Object} evt Sent event object.
    */
-  function onSelectStart (evt) {
-    evt.preventDefault();
+  self.onSelectStart = function (evt) {
+    if (typeof evt['preventDefault'] == 'function') {
+      evt.preventDefault();
+    }
   }
   
   /**
@@ -249,7 +279,7 @@ SI.Controls = new function () {
    *
    * @param {Object} evt Mouse move sent event.
    */
-  function onMouseMove (evt) {
+  self.onMouseMove = function (evt) {
     if (!on) {
       return;
     }
@@ -270,10 +300,13 @@ SI.Controls = new function () {
    *
    * @param {Object} evt Click sent event.
    */
-  function onClick (evt) {
+  self.onClick = function (evt) {
     if (!on) {
       return;
     }
+    
+    mouseX = evt.clientX;
+    mouseY = evt.clientY;
     
     if (typeof registeredInputListener == 'function') {
       registeredInputListener();

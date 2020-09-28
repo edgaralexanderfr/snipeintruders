@@ -1,5 +1,6 @@
 {
   "SpriteSize"                              : 128, 
+  "MinScreenWidth"                          : 1024, 
   "SceneFonts"                              : [
     {
       "name"  : "PixelLife", 
@@ -8,14 +9,23 @@
     }
   ], 
   
-  "SceneFullScreenOnFirstEvent"             : true, 
+  "SceneFullScreenOnFirstEvent"             : false, 
   "SceneIconUrl"                            : "res/images/icon.ico", 
   "SceneCursorUrl"                          : "res/cursors/transparent-cursor.cur", 
-  "SceneTitle"                              : "Snipe Intruders v1.0.0", 
+  "SceneTitle"                              : "SnipeIntruders v1.4.1", 
   "SceneBackgroundColor"                    : "#000000", 
   "SceneCanvasBackgroundColor"              : "#ffffff", 
   "SceneCanvasXMarginProportion"            : 1, 
-  "SceneCanvasYMarginProportion"            : 2, 
+  "SceneCanvasYMarginProportion"            : 1, 
+  "SceneWidth"                              : 896, 
+  "SceneHeight"                             : 384, 
+  
+  "GamepadTrackTime"                        : 30, 
+  "GamepadPauseButton1Index"                : 8, 
+  "GamepadPauseButton2Index"                : 9, 
+  "GamepadXAxisIndex"                       : 0, 
+  "GamepadYAxisIndex"                       : 1, 
+  "GamepadMoveMaxSpeed"                     : 40, 
   
   "IntroMessageMaxDelta"                    : 2, 
   "IntroMessageFadeOutMaxDelta"             : 100, 
@@ -40,9 +50,13 @@
   "StartScreenStartMessageMarginBottom"     : 15, 
   "StartScreenStartMessageFont"             : "48px PixelLife", 
   "StartScreenStartMessageColor"            : "#ffff66", 
+  "StartScreenStartGameKeyCode1"            : 70, 
+  "StartScreenStartGameKeyCode2"            : 13, 
   
   "GameSpawnEnemiesInitialDelta"            : 100, 
-  "GameEnemiesInitialDropSpeed"             : 1, 
+  "GameSpawnEnemiesFinalDelta"              : 17, 
+  "GameEnemiesInitialDropSpeed"             : 5, 
+  "GameEnemiesFinalDropSpeed"               : 80, 
   "GameLifeSumDifferenceProportion"         : 10, 
   "GameLifeSubtractionDifferenceProportion" : 10, 
   "GameScoreSumFallDifference"              : 50, 
@@ -56,6 +70,20 @@
   "GamePauseBackgroundColor"                : "#000000", 
   "GamePauseBackgroundOpacity"              : 0.5, 
   "GamePauseKeyCode"                        : 80, 
+  "GameMoveUpKeyCode1"                      : 87, 
+  "GameMoveUpKeyCode2"                      : 38, 
+  "GameMoveDownKeyCode1"                    : 83, 
+  "GameMoveDownKeyCode2"                    : 40, 
+  "GameMoveLeftKeyCode1"                    : 65, 
+  "GameMoveLeftKeyCode2"                    : 37, 
+  "GameMoveRightKeyCode1"                   : 68, 
+  "GameMoveRightKeyCode2"                   : 39, 
+  "GameShootKeyCode1"                       : 70, 
+  "GameShootKeyCode2"                       : 13, 
+  "GameMoveMaxDelta"                        : 2, 
+  "GameMoveSpeed"                           : 40, 
+  "GameGroundReachedVibrationTime"          : 400, 
+  "GameExplosionsVibrationTime"             : 1500, 
   
   "SceneryCloudsUpdateMaxDelta"             : 1, 
   "ScenerySkyUpdateMaxDelta"                : 1, 
@@ -122,7 +150,7 @@
   
   "EnemyDropUpdateMaxDelta"                 : 5, 
   "EnemySpriteUpdateMaxDelta"               : 3, 
-  "EnemyFreeFallMultiplication"             : 4, 
+  "EnemyFreeFallMultiplication"             : 1, 
   
   "CreditsUpdateMaxDelta"                   : 1, 
   "CreditsSkipMessageMaxDelta"              : 15, 
@@ -132,10 +160,12 @@
   "CreditsColor"                            : "#ffffff", 
   "CreditsLineHeight"                       : 75, 
   "CreditsScoreTitle"                       : "your score is\n", 
-  "CreditsLines"                            : "\n\nsnipe intruders\n\nprogramming and graphic design\nedgar alexander franco\n\ntypography\npixellife by william clifford\n\nused software\npiskel\nadobe photoshop cs3\nwincons\n\ngame testers\njeremy sthiven pacheco\nedgar samuel franco\n\nspecial thanks to\nmarta elena navasquez\n\nsupervised by\ngustavo jimenez\n\nproduced by\nedgar alexander franco\n\nthe characters in this game are fictitious and\nany resemblance to real persons living\n or dead is purely coincidental", 
+  "CreditsLines"                            : "\n\nsnipe intruders\n\nprogramming and graphics\nedgar alexander franco\n\ntypography\npixellife by william clifford\n\nused software\nnotepad plus plus\npiskel\nadobe photoshop cs3\nwincons\n\ngame testers\nedgar samuel franco\n\nspecial thanks to\nmarta elena navasquez\n\nproduced by\nedgar alexander franco\n\nthe characters in this game are fictitious and\nany resemblance to real persons living\n or dead is purely coincidental", 
   "CreditsSkipMessageText"                  : "click to skip", 
   "CreditsSkipMessageX"                     : 25, 
   "CreditsSkipMessageY"                     : 50, 
   "CreditsSkipMessageFont"                  : "48px PixelLife", 
-  "CreditsSkipMessageColor"                 : "#ffff66"
+  "CreditsSkipMessageColor"                 : "#ffff66", 
+  "CreditsSkipKeyCode1"                     : 70, 
+  "CreditsSkipKeyCode2"                     : 13
 }

@@ -6,6 +6,7 @@ SI.Renderer = new function () {
   var rendering                 = false;
   var fpsTime                   = 0;
   var logicTimer                = null;
+  var singleUpdateLoop          = false;
   var beforeLoadListener        = null;
   var loadErrorListener         = null;
   var resourceLoadErrorListener = null;
@@ -32,6 +33,15 @@ SI.Renderer = new function () {
   }
   
   /**
+   * Tells whether renderer is using a single update loop (requestAnimationFrame only) or not.
+   *
+   * @return {boolean}
+   */
+  self.getSingleUpdateLoop = function () {
+    return singleUpdateLoop;
+  }
+  
+  /**
    * Set the fpsTime through the provided fps, if it's zero or lower then fpsTime = 0.
    *
    * @param {Number} fps Frames per second.
@@ -41,6 +51,25 @@ SI.Renderer = new function () {
       fpsTime = Math.round(1000 / fps);
     } else {
       fpsTime = 0;
+    }
+  }
+  
+  /**
+   * Establishes whether renderer should use a single update loop (requestAnimationFrame only) or not.
+   *
+   * @param {boolean} $singleUpdateLoop Tells whether to use a single update loop or not.
+   */
+  self.setSingleUpdateLoop = function ($singleUpdateLoop) {
+    singleUpdateLoop = $singleUpdateLoop;
+    
+    if (!rendering) {
+      return;
+    }
+    
+    clearInterval(logicTimer);
+    
+    if (!singleUpdateLoop) {
+      logicTimer = setInterval(renderLogic, SI.res.ResourceLoader.getResources().properties.RendererLogicRenderTime);
     }
   }
   
@@ -119,6 +148,7 @@ SI.Renderer = new function () {
    */
   function onLoadComplete () {
     self.setFps(SI.res.ResourceLoader.getResources().properties.RendererFPS);
+    self.setSingleUpdateLoop(SI.res.ResourceLoader.getResources().properties.RendererSingleUpdateLoop);
     
     if (typeof prepareListener == 'function') {
       prepareListener();
@@ -134,7 +164,13 @@ SI.Renderer = new function () {
     }
     
     rendering = true;
-    logicTimer = setInterval(renderLogic, SI.res.ResourceLoader.getResources().properties.RendererLogicRenderTime);
+    
+    if (singleUpdateLoop) {
+      logicTimer = null;
+    } else {
+      logicTimer = setInterval(renderLogic, SI.res.ResourceLoader.getResources().properties.RendererLogicRenderTime);
+    }
+    
     renderGraphics();
   }
   
@@ -167,6 +203,10 @@ SI.Renderer = new function () {
       return;
     }
     
+    if (singleUpdateLoop) {
+      renderLogic();
+    }
+    
     if (typeof graphicsRenderListener == 'function') {
       graphicsRenderListener();
     }
@@ -197,6 +237,7 @@ SI.Renderer = new function () {
    */
   function main (evt) {
     SI.defineRequestAnimationFrame();
+    SI.defineVibrate();
     loadResources();
   }
   

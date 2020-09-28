@@ -227,6 +227,16 @@ SI.game.ui.StartScreen = new function () {
     SI.game.Scenery.setControlsListeners();
     
     SI.Controls.addClickListener(startGameListener);
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.StartScreenStartGameKeyCode1, 
+      startGameListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.StartScreenStartGameKeyCode2, 
+      startGameListener
+    );
   }
   
   /**
@@ -236,6 +246,9 @@ SI.game.ui.StartScreen = new function () {
     SI.game.Scenery.unsetControlsListeners();
     
     SI.Controls.removeClickListener(startGameListener);
+    
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.StartScreenStartGameKeyCode1, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.StartScreenStartGameKeyCode2, null);
   }
   
   /**

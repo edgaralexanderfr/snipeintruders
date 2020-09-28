@@ -21,8 +21,8 @@ SI.checkObjectHit = function (clickX, clickY, objectX, objectY, objectSpriteSize
     return false;
   }
   
-  var clickedObjectX = clickX - objectX;
-  var clickedObjectY = clickY - objectY;
+  var clickedObjectX = Math.floor(clickX - objectX);
+  var clickedObjectY = Math.floor(clickY - objectY);
   
   var alphaIndex = (objectSpriteSize * clickedObjectY + clickedObjectX) * 4 + 3;
   

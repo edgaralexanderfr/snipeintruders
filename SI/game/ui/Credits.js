@@ -96,6 +96,16 @@ SI.game.ui.Credits = new function () {
    */
   function setControlsListeners () {
     SI.Controls.addClickListener(skipControlListener);
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.CreditsSkipKeyCode1, 
+      skipControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.CreditsSkipKeyCode2, 
+      skipControlListener
+    );
   }
   
   /**
@@ -103,6 +113,9 @@ SI.game.ui.Credits = new function () {
    */
   function unsetControlsListeners () {
     SI.Controls.removeClickListener(skipControlListener);
+    
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.CreditsSkipKeyCode1, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.CreditsSkipKeyCode2, null);
   }
   
   /**

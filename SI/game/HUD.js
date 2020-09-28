@@ -444,11 +444,9 @@ SI.game.HUD = new function () {
     scoreDifferenceUpdateDelta = 0;
     scoreDifferenceColor = SI.res.ResourceLoader.getResources().game.properties.HUDScoreDifferencePositiveColor;
     crosshairSpriteIndex = 0;
-    crosshairX = SI.game.Renderer.getScene().getMouseX() - crosshairSpriteHalfSize;
-    crosshairY = SI.game.Renderer.getScene().getMouseY() - crosshairSpriteHalfSize;
+    crosshairFinalX = crosshairX = SI.game.Renderer.getScene().getMouseX() - crosshairSpriteHalfSize;
+    crosshairFinalY = crosshairY = SI.game.Renderer.getScene().getMouseY() - crosshairSpriteHalfSize;
     crosshairPrecisionDelta = 0;
-    crosshairFinalX = 0;
-    crosshairFinalY = 0;
     vulnerableTargetCheckDelta = 0;
     emptyLifeListener = null;
   }
@@ -457,7 +455,6 @@ SI.game.HUD = new function () {
    * Set the controls listeners.
    */
   self.setControlsListeners = function () {
-    SI.Controls.addMouseMoveListener(crosshairMouseMoveListener);
     SI.Controls.addClickListener(shotClickListener);
   }
   
@@ -465,7 +462,6 @@ SI.game.HUD = new function () {
    * Unset the controls listeners.
    */
   self.unsetControlsListeners = function () {
-    SI.Controls.removeMouseMoveListener(crosshairMouseMoveListener);
     SI.Controls.removeClickListener(shotClickListener);
   }
   
@@ -539,6 +535,12 @@ SI.game.HUD = new function () {
    * Performs a new shot creating a new shot animation and checking enemies hits.
    */
   self.shoot = function () {
+    var crosshairXDifference = crosshairFinalX - crosshairX;
+    var crosshairYDifference = crosshairFinalY - crosshairY;
+    renderCrosshairUpdateLogic();
+    crosshairFinalX = crosshairX + crosshairXDifference;
+    crosshairFinalY = crosshairY + crosshairYDifference;
+    
     var shotX = crosshairFinalX + shotXCenterDifference;
     var shotY = crosshairFinalY + shotYCenterDifference;
     var targetX = shotX + SI.game.animation.Shot.getSpriteSheetHalfSize();
@@ -556,16 +558,6 @@ SI.game.HUD = new function () {
   }
   
   /**
-   * Crosshair mouse move listener.
-   *
-   * @param {Object} evt Sent mouse move event.
-   */
-  function crosshairMouseMoveListener (evt) {
-    crosshairX = SI.game.Renderer.getScene().getMouseX() - crosshairSpriteHalfSize;
-    crosshairY = SI.game.Renderer.getScene().getMouseY() - crosshairSpriteHalfSize;
-  }
-  
-  /**
    * Shot click listener.
    *
    * @param {Object} evt Sent click event.
@@ -578,12 +570,21 @@ SI.game.HUD = new function () {
    * Render all the HUD's logic.
    */
   self.renderLogic = function () {
+    renderCrosshairUpdateLogic();
     renderLifeBarUpdateLogic();
     renderScoreUpdateLogic();
     renderScoreBlinkLogic();
     renderScoreDifferenceLogic();
     renderCrosshairPrecisionLogic();
     renderVulnerableTargetCheckLogic();
+  }
+  
+  /**
+   * Updates the crosshair coordinates centering mouse coordinates.
+   */
+  function renderCrosshairUpdateLogic () {
+    crosshairX = SI.game.Renderer.getScene().getMouseX() - crosshairSpriteHalfSize;
+    crosshairY = SI.game.Renderer.getScene().getMouseY() - crosshairSpriteHalfSize;
   }
   
   /**

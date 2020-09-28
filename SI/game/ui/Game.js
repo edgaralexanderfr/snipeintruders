@@ -8,6 +8,11 @@ SI.game.ui.Game = new function () {
   var enemiesDropSpeed     = 0;
   var pauseMessageX        = 0;
   var pauseMessageY        = 0;
+  var moveDelta            = 0;
+  var movingUp             = false;
+  var movingDown           = false;
+  var movingLeft           = false;
+  var movingRight          = false;
   
   /**
    * Tells whether the interface is displayed or not.
@@ -73,6 +78,52 @@ SI.game.ui.Game = new function () {
   }
   
   /**
+   * Returns the crosshair move delta.
+   *
+   * @return {Number}.
+   */
+  self.getMoveDelta = function () {
+    return moveDelta;
+  }
+  
+  /**
+   * Tells whether crosshair is moving up or not.
+   *
+   * @return {boolean}.
+   */
+  self.isMovingUp = function () {
+    return movingUp;
+  }
+  
+  
+  /**
+   * Tells whether crosshair is moving down or not.
+   *
+   * @return {boolean}.
+   */
+  self.isMovingDown = function () {
+    return movingDown;
+  }
+  
+  /**
+   * Tells whether crosshair is moving left or not.
+   *
+   * @return {boolean}.
+   */
+  self.isMovingLeft = function () {
+    return movingLeft;
+  }
+  
+  /**
+   * Tells whether crosshair is moving right or not.
+   *
+   * @return {boolean}.
+   */
+  self.isMovingRight = function () {
+    return movingRight;
+  }
+  
+  /**
    * TODO: call this method before anything. It initialises the spawnY value and computes the pause message 
    * properties.
    */
@@ -88,6 +139,8 @@ SI.game.ui.Game = new function () {
     spawnEnemiesMaxDelta = SI.res.ResourceLoader.getResources().game.properties.GameSpawnEnemiesInitialDelta;
     spawnEnemiesDelta = 0;
     enemiesDropSpeed = SI.res.ResourceLoader.getResources().game.properties.GameEnemiesInitialDropSpeed;
+    moveDelta = 0;
+    movingUp = movingDown = movingLeft = movingRight = false;
     
     SI.game.Scenery.resetState();
     SI.game.target.Parachute.resetState();
@@ -106,9 +159,99 @@ SI.game.ui.Game = new function () {
     SI.Animation.setControlsListeners();
     SI.game.HUD.setControlsListeners();
     
+    SI.Controls.setKeyDownAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveUpKeyCode1, 
+      startMovingUpControlListener
+    );
+    
+    SI.Controls.setKeyDownAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveUpKeyCode2, 
+      startMovingUpControlListener
+    );
+    
+    SI.Controls.setKeyDownAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveDownKeyCode1, 
+      startMovingDownControlListener
+    );
+    
+    SI.Controls.setKeyDownAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveDownKeyCode2, 
+      startMovingDownControlListener
+    );
+    
+    SI.Controls.setKeyDownAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveLeftKeyCode1, 
+      startMovingLeftControlListener
+    );
+    
+    SI.Controls.setKeyDownAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveLeftKeyCode2, 
+      startMovingLeftControlListener
+    );
+    
+    SI.Controls.setKeyDownAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveRightKeyCode1, 
+      startMovingRightControlListener
+    );
+    
+    SI.Controls.setKeyDownAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveRightKeyCode2, 
+      startMovingRightControlListener
+    );
+    
     SI.Controls.setKeyUpAction(
       SI.res.ResourceLoader.getResources().game.properties.GamePauseKeyCode, 
       pauseControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveUpKeyCode1, 
+      stopMovingUpControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveUpKeyCode2, 
+      stopMovingUpControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveDownKeyCode1, 
+      stopMovingDownControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveDownKeyCode2, 
+      stopMovingDownControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveLeftKeyCode1, 
+      stopMovingLeftControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveLeftKeyCode2, 
+      stopMovingLeftControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveRightKeyCode1, 
+      stopMovingRightControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameMoveRightKeyCode2, 
+      stopMovingRightControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameShootKeyCode1, 
+      shootControlListener
+    );
+    
+    SI.Controls.setKeyUpAction(
+      SI.res.ResourceLoader.getResources().game.properties.GameShootKeyCode2, 
+      shootControlListener
     );
   }
   
@@ -122,7 +265,26 @@ SI.game.ui.Game = new function () {
     SI.Animation.unsetControlsListeners();
     SI.game.HUD.unsetControlsListeners();
     
+    SI.Controls.setKeyDownAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveUpKeyCode1, null);
+    SI.Controls.setKeyDownAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveUpKeyCode2, null);
+    SI.Controls.setKeyDownAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveDownKeyCode1, null);
+    SI.Controls.setKeyDownAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveDownKeyCode2, null);
+    SI.Controls.setKeyDownAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveLeftKeyCode1, null);
+    SI.Controls.setKeyDownAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveLeftKeyCode2, null);
+    SI.Controls.setKeyDownAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveRightKeyCode1, null);
+    SI.Controls.setKeyDownAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveRightKeyCode2, null);
+    
     SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GamePauseKeyCode, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveUpKeyCode1, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveUpKeyCode2, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveDownKeyCode1, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveDownKeyCode2, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveLeftKeyCode1, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveLeftKeyCode2, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveRightKeyCode1, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameMoveRightKeyCode2, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameShootKeyCode1, null);
+    SI.Controls.setKeyUpAction(SI.res.ResourceLoader.getResources().game.properties.GameShootKeyCode2, null);
   }
   
   /**
@@ -176,6 +338,15 @@ SI.game.ui.Game = new function () {
     } else {
       SI.Renderer.render();
       SI.game.HUD.setControlsListeners();
+    }
+  }
+  
+  /**
+   * Performs a shot if game is being rendered.
+   */
+  function shoot () {
+    if (SI.Renderer.isRendering()) {
+      SI.game.HUD.shoot();
     }
   }
   
@@ -235,7 +406,88 @@ SI.game.ui.Game = new function () {
   }
   
   /**
-   * Sums a specific score when enemy reaches the ground on free fall, and subtracts life it arrived with a 
+   * Allows the crosshair to move up as soon as a registered key is being pressed.
+   *
+   * @param {Object} evt keyDown sent event.
+   */
+  function startMovingUpControlListener (evt) {
+    movingUp = true;
+  }
+  
+  /**
+   * Allows the crosshair to move down as soon as a registered key is being pressed.
+   *
+   * @param {Object} evt keyDown sent event.
+   */
+  function startMovingDownControlListener (evt) {
+    movingDown = true;
+  }
+  
+  /**
+   * Allows the crosshair to move left as soon as a registered key is being pressed.
+   *
+   * @param {Object} evt keyDown sent event.
+   */
+  function startMovingLeftControlListener (evt) {
+    movingLeft = true;
+  }
+  
+  /**
+   * Allows the crosshair to move right as soon as a registered key is being pressed.
+   *
+   * @param {Object} evt keyDown sent event.
+   */
+  function startMovingRightControlListener (evt) {
+    movingRight = true;
+  }
+  
+  /**
+   * Tells the crosshair to stop moving up as soon as a registered key is being released.
+   *
+   * @param {Object} evt keyUp sent event.
+   */
+  function stopMovingUpControlListener (evt) {
+    movingUp = false;
+  }
+  
+  /**
+   * Tells the crosshair to stop moving down as soon as a registered key is being released.
+   *
+   * @param {Object} evt keyUp sent event.
+   */
+  function stopMovingDownControlListener (evt) {
+    movingDown = false;
+  }
+  
+  /**
+   * Tells the crosshair to stop moving left as soon as a registered key is being released.
+   *
+   * @param {Object} evt keyUp sent event.
+   */
+  function stopMovingLeftControlListener (evt) {
+    movingLeft = false;
+  }
+  
+  /**
+   * Tells the crosshair to stop moving right as soon as a registered key is being released.
+   *
+   * @param {Object} evt keyUp sent event.
+   */
+  function stopMovingRightControlListener (evt) {
+    movingRight = false;
+  }
+  
+  /**
+   * Triggers a new shot as soon as a registered key is being released.
+   *
+   * @param {Object} evt keyUp sent event.
+   */
+  function shootControlListener (evt) {
+    shoot();
+  }
+  
+  /**
+   * Sums a specific score when enemy reaches the ground on free fall, and subtracts life if arrived with a 
    * parachute.
    *
    * @param {Object} enemy Enemy that arrived to the ground.
@@ -243,17 +495,12 @@ SI.game.ui.Game = new function () {
   function groundReachedListener (enemy) {
     if (enemy.hasParachute()) {
       SI.game.HUD.subtractLife(SI.res.ResourceLoader.getResources().game.properties.GameLifeSubtractionDifferenceProportion);
-    } else {
-      enemiesDropSpeed += SI.res.ResourceLoader.getResources().game.properties.GameEnemiesDropSpeedDifference;
       
-      var nextSpawnEnemiesDelta = spawnEnemiesDelta - SI.res.ResourceLoader.getResources().game.properties.GameSpawnEnemiesDeltaDifference;
-      
-      if (nextSpawnEnemiesDelta < 1) {
-        nextSpawnEnemiesDelta = 1;
+      if (!SI.game.Scenery.isExploding()) {
+        SI.vibrate(SI.res.ResourceLoader.getResources().game.properties.GameGroundReachedVibrationTime);
       }
-      
-      spawnEnemiesDelta = nextSpawnEnemiesDelta;
-      
+    } else {
+      updateSpawnSpeed();
       SI.game.HUD.sumScore(SI.res.ResourceLoader.getResources().game.properties.GameScoreSumFallDifference);
       SI.game.HUD.sumLife(SI.res.ResourceLoader.getResources().game.properties.GameLifeSumDifferenceProportion);
     }
@@ -264,18 +511,35 @@ SI.game.ui.Game = new function () {
    * enemies speed.
    */
   function hitListener (enemy) {
-    enemiesDropSpeed += SI.res.ResourceLoader.getResources().game.properties.GameEnemiesDropSpeedDifference;
+    updateSpawnSpeed();
+    SI.game.HUD.sumScore(SI.res.ResourceLoader.getResources().game.properties.GameScoreSumHitDifference);
+    SI.game.HUD.sumLife(SI.res.ResourceLoader.getResources().game.properties.GameLifeSumDifferenceProportion);
+  }
+  
+  /**
+   * Updates the drop speed and spawn delta until reach the max/min value.
+   */
+  function updateSpawnSpeed () {
+    var enemiesNextDropSpeed = 
+      enemiesDropSpeed + SI.res.ResourceLoader.getResources().game.properties.GameEnemiesDropSpeedDifference;
+    
+    if (SI.res.ResourceLoader.getResources().game.properties.GameEnemiesFinalDropSpeed < 1) {
+      enemiesDropSpeed = enemiesNextDropSpeed;
+    } else 
+    if (enemiesDropSpeed < SI.res.ResourceLoader.getResources().game.properties.GameEnemiesFinalDropSpeed) {
+      enemiesDropSpeed = Math.min(
+        enemiesNextDropSpeed, 
+        SI.res.ResourceLoader.getResources().game.properties.GameEnemiesFinalDropSpeed
+      );
+    }
     
     var nextSpawnEnemiesMaxDelta = spawnEnemiesMaxDelta - SI.res.ResourceLoader.getResources().game.properties.GameSpawnEnemiesDeltaDifference;
     
-    if (nextSpawnEnemiesMaxDelta < 1) {
-      nextSpawnEnemiesMaxDelta = 1;
+    if (nextSpawnEnemiesMaxDelta < SI.res.ResourceLoader.getResources().game.properties.GameSpawnEnemiesFinalDelta) {
+      nextSpawnEnemiesMaxDelta = SI.res.ResourceLoader.getResources().game.properties.GameSpawnEnemiesFinalDelta;
     }
     
     spawnEnemiesMaxDelta = nextSpawnEnemiesMaxDelta;
-    
-    SI.game.HUD.sumScore(SI.res.ResourceLoader.getResources().game.properties.GameScoreSumHitDifference);
-    SI.game.HUD.sumLife(SI.res.ResourceLoader.getResources().game.properties.GameLifeSumDifferenceProportion);
   }
   
   /**
@@ -284,6 +548,7 @@ SI.game.ui.Game = new function () {
    */
   function emptyLifeListener () {
     SI.game.Scenery.startExplosions();
+    SI.vibrate(SI.res.ResourceLoader.getResources().game.properties.GameExplosionsVibrationTime);
   }
   
   /**
@@ -297,6 +562,7 @@ SI.game.ui.Game = new function () {
     SI.game.HUD.renderLogic();
     
     renderSpawnEnemiesLogic();
+    renderMoveLogic();
   }
   
   /**
@@ -310,6 +576,41 @@ SI.game.ui.Game = new function () {
       
       if (!SI.game.Scenery.isExploding()) {
         spawnRandomEnemy();
+      }
+    }
+  }
+  
+  /**
+   * Updates the crosshair move along each independent direction (up/down/left/right).
+   */
+  function renderMoveLogic () {
+    moveDelta++;
+    
+    if (moveDelta >= SI.res.ResourceLoader.getResources().game.properties.GameMoveMaxDelta) {
+      moveDelta = 0;
+      
+      if (movingUp) {
+        SI.Controls.setMouseY(
+          SI.Controls.getMouseY() - SI.res.ResourceLoader.getResources().game.properties.GameMoveSpeed
+        );
+      }
+      
+      if (movingDown) {
+        SI.Controls.setMouseY(
+          SI.Controls.getMouseY() + SI.res.ResourceLoader.getResources().game.properties.GameMoveSpeed
+        );
+      }
+      
+      if (movingLeft) {
+        SI.Controls.setMouseX(
+          SI.Controls.getMouseX() - SI.res.ResourceLoader.getResources().game.properties.GameMoveSpeed
+        );
+      }
+      
+      if (movingRight) {
+        SI.Controls.setMouseX(
+          SI.Controls.getMouseX() + SI.res.ResourceLoader.getResources().game.properties.GameMoveSpeed
+        );
       }
     }
   }

@@ -1,4 +1,5 @@
 {
-  "RendererLogicRenderTime" : 30, 
-  "RendererFPS"             : 24
+  "RendererLogicRenderTime"  : 30, 
+  "RendererFPS"              : 24, 
+  "RendererSingleUpdateLoop" : false
 }
